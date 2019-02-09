@@ -36,6 +36,7 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Print("Req: %s %s", r.URL.Host, r.URL.Path)
 	t := template.Must(template.ParseFiles("./redirect.html"))
 
 	// config := readConfig()
