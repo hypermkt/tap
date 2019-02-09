@@ -36,24 +36,29 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("Req: %s %s", r.URL.Host, r.URL.Path)
 	t := template.Must(template.ParseFiles("./redirect.html"))
+	notfound := template.Must(template.ParseFiles("./404.html"))
 
-	// config := readConfig()
-	// for _, redirect := range config.Redirects {
-	// 	fmt.Printf("From: %s, To: %s", redirect.From, redirect.To)
-	// }
+	config := readConfig()
+	for _, redirect := range config.Redirects {
+		if r.URL.Host == redirect.From {
+			page := Page{
+				Count:        5,
+				RedirectFrom: redirect.From,
+				RedirectTo:   redirect.To,
+			}
+			fmt.Printf("From: %s, To: %s", redirect.From, redirect.To)
 
-	// TODO: リダイレクト元・先設定は別設定ファイルに移譲
-	// TODO: ドメイン名をリダイレクト元が一致したときのみリダイレクトさせる
-	// TODO: アクセスログ出力をする
-	// TODO: ドメイン名が一致しなかった場合のエラー画面を出力する
-	page := Page{
-		Count:        5,
-		RedirectFrom: "redirect01.hypermkt.jp",
-		RedirectTo:   "http://www.yahoo.co.jp",
+			err := t.Execute(w, page)
+			if err != nil {
+				panic(err)
+			}
+			return
+		}
 	}
-	err := t.Execute(w, page)
+
+	// TODO: アクセスログ出力をする
+	err := notfound.Execute(w, Page{})
 	if err != nil {
 		panic(err)
 	}
