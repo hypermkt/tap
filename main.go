@@ -32,7 +32,6 @@ func main() {
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
-	fmt.Printf("Starting server at Port %d", port)
 	http.ListenAndServe(":"+port, nil)
 }
 
