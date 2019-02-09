@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"text/template"
 )
 
@@ -28,9 +28,12 @@ type Redirect struct {
 func main() {
 	http.HandleFunc("/", handler)
 
-	port, _ := strconv.Atoi(os.Args[1])
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
 	fmt.Printf("Starting server at Port %d", port)
-	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	http.ListenAndServe(":"+port, nil)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
