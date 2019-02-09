@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"text/template"
 )
@@ -11,6 +14,15 @@ type Page struct {
 	RedirectTo   string
 }
 
+type Config struct {
+	Redirects []Redirect `json:"redirects"`
+}
+
+type Redirect struct {
+	From string `json:"from"`
+	To   string `json:"to"`
+}
+
 func main() {
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":80", nil)
@@ -18,6 +30,11 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./redirect.html"))
+
+	// config := readConfig()
+	// for _, redirect := range config.Redirects {
+	// 	fmt.Printf("From: %s, To: %s", redirect.From, redirect.To)
+	// }
 
 	// TODO: リダイレクト元・先設定は別設定ファイルに移譲
 	// TODO: ドメイン名をリダイレクト元が一致したときのみリダイレクトさせる
@@ -32,4 +49,19 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func readConfig() *Config {
+	configJSON, err := ioutil.ReadFile("./config.json")
+	jsonBytes := ([]byte)(configJSON)
+	if err != nil {
+		panic(err)
+	}
+	data := new(Config)
+	err = json.Unmarshal(jsonBytes, data)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	return data
 }

@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    {"from": "redirect-example.hypermkt.jp", "to": "https://www.yahoo.co.jp/"}
+  ]
+}
