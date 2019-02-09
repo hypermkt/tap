@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"strconv"
 	"text/template"
 )
 
@@ -25,7 +27,10 @@ type Redirect struct {
 
 func main() {
 	http.HandleFunc("/", handler)
-	http.ListenAndServe(":80", nil)
+
+	port, _ := strconv.Atoi(os.Args[1])
+	fmt.Printf("Starting server at Port %d", port)
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
