@@ -27,46 +27,33 @@ type Redirect struct {
 
 func main() {
 	http.HandleFunc("/", handler)
-
 	// serve static files
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	http.ListenAndServe(getPort(), nil)
+}
 
+func getPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
-	http.ListenAndServe(":"+port, nil)
+
+	return ":" + port
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./templates/redirect.html"))
-	notfound := template.Must(template.ParseFiles("./templates/404.html"))
-
-	config := readConfig()
-	for _, redirect := range config.Redirects {
+	for _, redirect := range readConfig().Redirects {
 		if r.Host == redirect.From {
-			page := Page{
+			displayRedirectPage(w, Page{
 				Count:        5,
 				RedirectFrom: redirect.From,
 				RedirectTo:   redirect.To,
-			}
-			fmt.Printf("From: %s, To: %s", redirect.From, redirect.To)
-
-			w.WriteHeader(http.StatusOK)
-			err := t.Execute(w, page)
-			if err != nil {
-				panic(err)
-			}
+			})
 			return
 		}
 	}
 
-	// TODO: アクセスログ出力をする
-	w.WriteHeader(http.StatusNotFound)
-	err := notfound.Execute(w, Page{})
-	if err != nil {
-		panic(err)
-	}
+	displayNotFoundPage(w)
 }
 
 func readConfig() *Config {
@@ -82,4 +69,22 @@ func readConfig() *Config {
 	}
 
 	return data
+}
+
+func displayNotFoundPage(w http.ResponseWriter) {
+	t := template.Must(template.ParseFiles("./templates/404.html"))
+	w.WriteHeader(http.StatusNotFound)
+	err := t.Execute(w, Page{})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func displayRedirectPage(w http.ResponseWriter, p Page) {
+	w.WriteHeader(http.StatusOK)
+	t := template.Must(template.ParseFiles("./templates/redirect.html"))
+	err := t.Execute(w, p)
+	if err != nil {
+		panic(err)
+	}
 }
