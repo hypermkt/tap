@@ -36,8 +36,8 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./redirect.html"))
-	notfound := template.Must(template.ParseFiles("./404.html"))
+	t := template.Must(template.ParseFiles("./templates/redirect.html"))
+	notfound := template.Must(template.ParseFiles("./templates/404.html"))
 
 	config := readConfig()
 	for _, redirect := range config.Redirects {
