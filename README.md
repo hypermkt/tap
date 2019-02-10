@@ -7,7 +7,7 @@ tap (short for trap and pass in soccer) is a simple redirect server.
 1. Set config.json
 1. Deply to Heroku
 1. Add wildcard domain in settings. DNS Target will be displayed. 
-  * ex) `*.hypermkt.jp`
+    * ex) `*.hypermkt.jp`
 1. Specify the DNS Target to your DNS provider for the destination of CNAME.
 
 ### Directory Structure
