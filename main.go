@@ -41,7 +41,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	config := readConfig()
 	for _, redirect := range config.Redirects {
-		if r.URL.Host == redirect.From {
+		if r.Host == redirect.From {
 			page := Page{
 				Count:        5,
 				RedirectFrom: redirect.From,
