@@ -4,6 +4,9 @@ tap (short for trap and pass in soccer) is a simple redirect server.
 ## Getting Started
 
 ### Usage with Heroku
+1. Install [statik](https://github.com/rakyll/statik)
+1. Build static files
+    * `$ statik -src=assets`
 1. Set config.json
 1. Deply to Heroku
 1. Add wildcard domain in settings. DNS Target will be displayed. 
