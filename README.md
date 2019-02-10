@@ -45,7 +45,8 @@ Static files are servered from assets directory. You can create any directories 
 
 #### templates
 
-file name|use
+file|use
+---|---
 redirect.html|Displayed before beeing redirected.
 404.html|Displayed when specified URL didn't match with config.json
 
