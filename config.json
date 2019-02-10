@@ -1,5 +1,6 @@
 {
   "redirects": [
+    {"from": "localhost", "to": "https://www.bing.com/"},
     {"from": "redirect-example01.hypermkt.jp", "to": "https://www.yahoo.co.jp/"},
     {"from": "redirect-example02.hypermkt.jp", "to": "https://www.google.co.jp/"}
   ]
