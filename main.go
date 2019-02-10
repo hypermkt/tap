@@ -8,6 +8,9 @@ import (
 	"net/http"
 	"os"
 	"text/template"
+
+	_ "github.com/hypermkt/tap/statik"
+	"github.com/rakyll/statik/fs"
 )
 
 type Page struct {
@@ -28,7 +31,7 @@ type Redirect struct {
 func main() {
 	http.HandleFunc("/", handler)
 	// serve static files
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(getAssetsFS())))
 	http.ListenAndServe(getPort(), nil)
 }
 
@@ -54,6 +57,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	displayNotFoundPage(w)
+}
+
+func getAssetsFS() http.FileSystem {
+	statikFS, err := fs.New()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return statikFS
 }
 
 func readConfig() *Config {
