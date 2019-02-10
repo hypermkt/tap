@@ -1,1 +1,1 @@
-web: trap-and-pass
+web: tap
