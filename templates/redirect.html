@@ -3,8 +3,10 @@
   <head>
       <meta charset="UTF-8">
       <meta http-equiv="refresh" content="{{ .Count }}; URL='{{ .RedirectTo }}'" />
+      <link rel="stylesheet" href="/assets/css/main.css">
   </head>
 <body>
-{{ .RedirectFrom }} から {{ .RedirectTo }} にリダイレクトします
+<div align="center"><img src="/assets/images/logo.png" /></div>
+<p class="text">{{ .RedirectFrom }} から {{ .RedirectTo }} にリダイレクトします</p>
 </body>
 </html>

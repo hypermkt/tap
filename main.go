@@ -28,6 +28,9 @@ type Redirect struct {
 func main() {
 	http.HandleFunc("/", handler)
 
+	// serve static files
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
