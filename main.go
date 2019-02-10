@@ -52,6 +52,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			}
 			fmt.Printf("From: %s, To: %s", redirect.From, redirect.To)
 
+			w.WriteHeader(http.StatusOK)
 			err := t.Execute(w, page)
 			if err != nil {
 				panic(err)
@@ -61,6 +62,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: アクセスログ出力をする
+	w.WriteHeader(http.StatusNotFound)
 	err := notfound.Execute(w, Page{})
 	if err != nil {
 		panic(err)
