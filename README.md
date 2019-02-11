@@ -1,4 +1,6 @@
-# tap 
+# tap
+[![Build Status](https://travis-ci.org/hypermkt/tap.svg?branch=master)](https://travis-ci.org/hypermkt/tap)
+
 tap (short for trap and pass in soccer) is a simple redirect server.
 
 ## Getting Started

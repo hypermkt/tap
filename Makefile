@@ -7,3 +7,7 @@ assets: statik/statik.go
 
 build: bin/tap
 	go build -o $(BUILD_FILE)
+
+test:
+	go mod download
+	go test -v
