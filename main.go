@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"text/template"
 
@@ -35,7 +36,7 @@ func getPort() string {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	for _, redirect := range config.ReadConfig().Redirects {
-		if r.Host == redirect.From {
+		if r.Host == parseURL(redirect.From).Host {
 			displayRedirectPage(w, Page{
 				Count:        5,
 				RedirectFrom: redirect.From,
@@ -46,6 +47,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	displayNotFoundPage(w)
+}
+
+func parseURL(s string) *url.URL {
+	u, err := url.Parse(s)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return u
 }
 
 func getAssetsFS() http.FileSystem {
