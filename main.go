@@ -1,15 +1,13 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"text/template"
 
 	_ "github.com/hypermkt/tap/statik"
+	config "github.com/hypermkt/tap/tap"
 	"github.com/rakyll/statik/fs"
 )
 
@@ -17,15 +15,6 @@ type Page struct {
 	Count        int
 	RedirectFrom string
 	RedirectTo   string
-}
-
-type Config struct {
-	Redirects []Redirect `json:"redirects"`
-}
-
-type Redirect struct {
-	From string `json:"from"`
-	To   string `json:"to"`
 }
 
 func main() {
@@ -45,7 +34,7 @@ func getPort() string {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	for _, redirect := range readConfig().Redirects {
+	for _, redirect := range config.ReadConfig().Redirects {
 		if r.Host == redirect.From {
 			displayRedirectPage(w, Page{
 				Count:        5,
@@ -66,21 +55,6 @@ func getAssetsFS() http.FileSystem {
 	}
 
 	return statikFS
-}
-
-func readConfig() *Config {
-	configJSON, err := ioutil.ReadFile("./config.json")
-	jsonBytes := ([]byte)(configJSON)
-	if err != nil {
-		panic(err)
-	}
-	data := new(Config)
-	err = json.Unmarshal(jsonBytes, data)
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-
-	return data
 }
 
 func displayNotFoundPage(w http.ResponseWriter) {
