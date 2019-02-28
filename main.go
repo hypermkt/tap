@@ -37,11 +37,16 @@ func getPort() string {
 func handler(w http.ResponseWriter, r *http.Request) {
 	for _, redirect := range config.ReadConfig().Redirects {
 		if r.Host == parseURL(redirect.From).Host {
-			displayRedirectPage(w, Page{
-				Count:        5,
-				RedirectFrom: redirect.From,
-				RedirectTo:   redirect.To,
-			})
+			if redirect.ShowInfo {
+				displayRedirectPage(w, Page{
+					Count:        5,
+					RedirectFrom: redirect.From,
+					RedirectTo:   redirect.To,
+				})
+			} else {
+				http.Redirect(w, r, redirect.To, 301)
+			}
+
 			return
 		}
 	}
