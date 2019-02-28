@@ -11,8 +11,9 @@ type Config struct {
 }
 
 type Redirect struct {
-	From string `json:"from"`
-	To   string `json:"to"`
+	From     string `json:"from"`
+	To       string `json:"to"`
+	ShowInfo bool   `json:"showInfo"`
 }
 
 func ReadConfig() *Config {
